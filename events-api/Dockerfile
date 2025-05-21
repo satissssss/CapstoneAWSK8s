@@ -1,4 +1,3 @@
-Dockerfile
 # Use aws public image
 FROM public.ecr.aws/docker/library/node:slim
 
