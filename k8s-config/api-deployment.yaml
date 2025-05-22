@@ -17,7 +17,7 @@ spec:
        ver: v1.0
    spec:
      containers:
-     - image: 065145552369.dkr.ecr.us-east-1.amazonaws.com/events-api:1.0
+     - image: 065145552369.dkr.ecr.us-east-1.amazonaws.com/events-api:latest
        name: events-api
        ports:
        - containerPort: 8082
