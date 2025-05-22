@@ -149,10 +149,7 @@ http://ec2-54-211-29-128.compute-1.amazonaws.com:8080/
 Setup EKS Cluster:
 eksctl create cluster -f cluster-config.yaml
 
-Check testpod by running:
-exec testpod -it --/bin/bash
-eksctl utils describe-stacks --region=us-east-1 --cluster=sat-capstone-cluste
-
+Check cluster and nodes created:
 kubectl cluster-info
 kubectl get services 
 kubectl get nodes
@@ -166,49 +163,81 @@ kubectl apply -f mario-pod.yaml
 kubectl get pods
 kubectl describe pod supermario-pod
 
+
 Expose with loadbalancer:
-kubectl expose pod supermario-pod --type=LoadBalancer --name=supermario-svc --port=80 --target-port=8080
+kubectl expose pod supermario-pod-capstone --type=LoadBalancer --name=supermario-svc --port=80 --target-port=8080
 kubectl get service
 
 Check logs of pod:
 kubectl logs supermario-pod
 
-
-Delete the pod:
-kubectl delete pod supermario-pod 
-kubectl get pods
-
-Delete the service:
-kubectl delete service supermario-svc
-kubectl get svc
-
-Create new deployment for API:
-kubectl apply -f api-deployment.yaml 
-
-Verify it was deployed:
-kubectl get deployments
-kubectl get pods
-
-Describe pod:
-kubectl describe pod <pod-name>
-
-Create new deployment for Web:
-kubectl apply -f web-deployment.yaml 
-
-Expose website with loadbalancer:
-kubectl expose pod events-website --type=LoadBalancer --name=events-web-svc --port=80 --target-port=8080
+Check the deployed App in external IP created in Loadbalancer:
+http://a157b485dc6b747e2a24e27710f33549-115759024.us-east-1.elb.amazonaws.com/
 
 Install DB through Helm:
 helm install database-server oci://registry-1.docker.io/bitnamicharts/mariadb
 
-Check created DB:
+Check created DB
 helm list
 helm status database-server
 
-Create service for API and Web:
-kubectl apply -f web-service.yaml 
-kubectl apply -f api-service.yaml 
-
+Setup cronjob for Maria DB initialize with records:
 Run the following command to deploy the job:
 kubectl apply -f db_init_job.yaml
+
+Check Job status:
+kubectl get jobs -w
+
+View the logs:
+kubectl get pods
+kubectl logs mariadb-init-capstone
+
+
+Create new deployments:
+kubectl apply -f api-deployment.yaml 
+kubectl apply -f web-deployment.yaml 
+
+Verify it was deployed:
+kubectl get deploy
+
+Create new services:
+kubectl apply -f api-service.yaml 
+kubectl apply -f web-service.yaml 
+
+Verify it was deployed:
+kubectl get service
+
+Verify the Public dns of web is working:
+http://a9bca30b8f2b343a2830297c2695188c-715389031.us-east-1.elb.amazonaws.com/
+
+Setup cronjob and verify
+kubectl apply -f cronjob Capstone-cronjob
+
+Check Blue/green deploy:
+kubectl apply -f web-deployment-v2.yaml
+kubetcl apply -f web-service.yaml
+
+Delete older deployment:
+kubectl delete -f web-deployment.yaml
+
+Test HPA:
+kubectl apply -f HPAdeployment.yaml 
+kubectl apply -f autoscale-hpa.yaml 
+
+Run new app to use memory:
+kubectl apply -f HPAservice.yaml
+
+Call node App in loop:
+while true; do curl http://a9b673c5f1a674d0c8d8932afc7a56ea-614781299.us-east-1.elb.amazonaws.com/; done;
+
+Check hpa:
+kubectl get hpa
+
+
+Delete all:
+Cronjob
+Pods
+services
+deployments
+EKS
 
