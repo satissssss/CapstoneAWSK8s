@@ -12,8 +12,16 @@
 5. Deploy apps with database into EKS
 6. Test blue green deployment
 
+**Folders purpose on GIT:**
+HPA - Contains k8s config file to test the HPA
+database-initializer - Contains the Docker project for DB initializer 
+ekscluster - contains the EKScluster config
+events-api - Contains the Docker project for API
+events-website - Contains the Docker projet for Website
+k8s-config - Contains different k8s config files.
+
+
 **Commands used to achieve the above**
-Setup new deployment EC2:
 Setup Access Key and secret:
 
 Install Kubernetes and provide permissions:
@@ -181,7 +189,16 @@ Check created DB
 helm list
 helm status database-server
 
-Setup cronjob for Maria DB initialize with records:
+Setup ECR with events-job repo
+docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) 065145552369.dkr.ecr.us-east-2.amazonaws.com/events-job
+
+docker build . -t 065145552369.dkr.ecr.us-east-1.amazonaws.com/events-job:v1.0
+docker push 065145552369.dkr.ecr.us-east-1.amazonaws.com/events-job:v1.0
+
+Check secrets created:
+kubectl get secrets
+
+Setup cronjob for Maria DB initialize with records with image created in ECR:
 Run the following command to deploy the job:
 kubectl apply -f db_init_job.yaml
 
@@ -233,6 +250,7 @@ while true; do curl http://a9b673c5f1a674d0c8d8932afc7a56ea-614781299.us-east-1.
 Check hpa:
 kubectl get hpa
 
+Setup 
 
 Delete all:
 Cronjob
@@ -240,4 +258,3 @@ Pods
 services
 deployments
 EKS
-
