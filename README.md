@@ -209,4 +209,6 @@ Create service for API and Web:
 kubectl apply -f web-service.yaml 
 kubectl apply -f api-service.yaml 
 
+Run the following command to deploy the job:
+kubectl apply -f db_init_job.yaml
 
