@@ -9,12 +9,12 @@ spec:
  selector:
    matchLabels:
      app: events-web
-     ver: v2.0
+     ver: v4.0
  template:
    metadata:
      labels:
        app: events-web
-       ver: v2.0
+       ver: v4.0
    spec:
      containers:
      - image: 065145552369.dkr.ecr.us-east-1.amazonaws.com/events-website:4.0
