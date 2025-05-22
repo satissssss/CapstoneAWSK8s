@@ -250,11 +250,14 @@ while true; do curl http://a9b673c5f1a674d0c8d8932afc7a56ea-614781299.us-east-1.
 Check hpa:
 kubectl get hpa
 
-Setup 
+Setup cronjob:
+kubectl apply -f caps-cronjob.yaml 
 
-Delete all:
-Cronjob
-Pods
-services
-deployments
-EKS
+Check cronjob running:
+kubectl apply -f cronjob-caps.yaml 
+
+Delete EKS:
+eksctl delete cluster -f cluster-config.yaml
+
+Docker stopped and removed running instance
+
