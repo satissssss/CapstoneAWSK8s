@@ -157,6 +157,10 @@ http://ec2-54-211-29-128.compute-1.amazonaws.com:8080/
 Setup EKS Cluster:
 eksctl create cluster -f cluster-config.yaml
 
+update kubectl with cluster created
+aws eks update-kubeconfig --region us-east-1 --name <<Cluster name>>
+
+
 Check cluster and nodes created:
 kubectl cluster-info
 kubectl get services 
