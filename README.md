@@ -191,7 +191,7 @@ helm install database-server oci://registry-1.docker.io/bitnamicharts/mariadb
 
 Setup storageclass for mariadb to use
 kubectl get storageclass
-kubectl patch storageclass gold -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 kubectl get services
 
 Check created DB
