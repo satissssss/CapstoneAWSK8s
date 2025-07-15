@@ -189,6 +189,11 @@ http://a157b485dc6b747e2a24e27710f33549-115759024.us-east-1.elb.amazonaws.com/
 Install DB through Helm:
 helm install database-server oci://registry-1.docker.io/bitnamicharts/mariadb
 
+Setup storageclass for mariadb to use
+kubectl get storageclass
+kubectl patch storageclass gold -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+kubectl get services
+
 Check created DB
 helm list
 helm status database-server
